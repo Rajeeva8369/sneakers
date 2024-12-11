@@ -5,11 +5,13 @@ import Footer from "./components/Footer";
 import Home from "./components/pages/Home";
 import ProductList from "./components/pages/ProductList";
 import ProductDetails from "./components/pages/ProductDetails";
-import CartProvider from "./Context/CartProvider";
+import Login from "./components/pages/Login";
+import Register from "./components/pages/Register";
+
 
 function App() {
   return (
-    <CartProvider>
+    
       <Router>
         <Navbar />
         <main className="min-h-screen">
@@ -17,11 +19,13 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList />} />
             <Route path="/products/:documentId" element={<ProductDetails />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
         <Footer />
       </Router>
-    </CartProvider>
+    
   );
 }
 

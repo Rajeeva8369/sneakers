@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { CartContext } from "../Context/CartProvider";
 
 const Navbar = () => {
-  const { cartItems } = useContext(CartContext);
+  // Simulez un état pour le panier
+  const [cartItems, setCartItems] = useState([]);
 
   return (
     <nav className="bg-gray-900 text-white py-4 shadow-md">
@@ -15,7 +15,15 @@ const Navbar = () => {
           <Link to="/" className="hover:text-gray-300">
             Accueil
           </Link>
-         
+          <Link to="/products" className="hover:text-gray-300">
+            Produits
+          </Link>
+          <Link to="/login" className="hover:text-gray-300">
+            Connexion
+          </Link>
+          <Link to="/register" className="hover:text-gray-300">
+            Inscription
+          </Link>
           <Link to="/cart" className="relative">
             🛒
             {cartItems.length > 0 && (

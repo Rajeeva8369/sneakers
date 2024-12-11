@@ -1,27 +1,27 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
+import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./components/pages/Home";
 import ProductList from "./components/pages/ProductList";
 import ProductDetails from "./components/pages/ProductDetails";
-import HomeCarousel from "./components/HomeCarousel";
+import CartProvider from "./Context/CartProvider";
 
 function App() {
   return (
-    <Router>
-      <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/products/:documentId" element={<ProductDetails />} />
-
-          <Route path="/" element={<HomeCarousel />} />
-        </Routes>
-      </main>
-      <Footer />
-    </Router>
+    <CartProvider>
+      <Router>
+        <Navbar />
+        <main className="min-h-screen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<ProductList />} />
+            <Route path="/products/:documentId" element={<ProductDetails />} />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
+    </CartProvider>
   );
 }
 

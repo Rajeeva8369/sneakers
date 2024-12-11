@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header style={{ padding: "20px", backgroundColor: "#333", color: "#fff" }}>
-      <h1 style={{ textAlign: "center" }}>Luxious Bag</h1>
-      <nav style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
-        <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Accueil</Link>
-        <Link to="/products" style={{ color: "#fff", textDecoration: "none" }}>Produits</Link>
+    <header className="bg-gray-900 text-white py-4 shadow-md">
+      <h1 className="text-center">Luxious Bag</h1>
+      <nav className="flex justify-center gap-8">
+        <Link to="/" className="hover:text-gray-300">
+          Accueil
+        </Link>
+        <Link to="/products" className="hover:text-gray-300">
+          Produits
+        </Link>
       </nav>
     </header>
   );

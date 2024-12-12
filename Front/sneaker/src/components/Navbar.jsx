@@ -1,8 +1,22 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const [cartItems, setCartItems] = useState([]); 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    setIsAuthenticated(!!token); 
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwt"); 
+    setIsAuthenticated(false); 
+    alert("Vous êtes déconnecté !");
+    window.location.href = "/login";
+  };
 
   return (
     <nav className="bg-gray-900 text-white py-4 shadow-md">
@@ -10,8 +24,6 @@ const Navbar = () => {
         <Link to="/" className="text-2xl font-bold">
           Luxious Bag
         </Link>
-        
-
         <div className="flex items-center space-x-6">
           <Link to="/" className="hover:text-gray-300">
             Accueil
@@ -19,26 +31,33 @@ const Navbar = () => {
           <Link to="/products" className="hover:text-gray-300">
             Produits
           </Link>
-          <Link to="/wishlists" className="hover:text-gray-300">
-           Wishlist
+          {isAuthenticated && (
+            <Link to="/wishlists" className="hover:text-gray-300">
+              Wishlist
             </Link>
+          )}
+          {isAuthenticated && (
             <Link to="/profile" className="hover:text-gray-300">
               Profil
             </Link>
-          <Link to="/login" className="hover:text-gray-300">
-            Connexion
-          </Link>
-          <Link to="/register" className="hover:text-gray-300">
-            Inscription
-          </Link>
-          <Link to="/cart" className="relative">
-            🛒
-            {cartItems.length > 0 && (
-              <span className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center text-xs text-white bg-red-600 rounded-full">
-                {cartItems.length}
-              </span>
-            )}
-          </Link>
+          )}
+          {!isAuthenticated ? (
+            <>
+              <Link to="/login" className="hover:text-gray-300">
+                Connexion
+              </Link>
+              <Link to="/register" className="hover:text-gray-300">
+                Inscription
+              </Link>
+            </>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Déconnexion
+            </button>
+          )}
         </div>
       </div>
     </nav>

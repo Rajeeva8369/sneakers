@@ -30,7 +30,7 @@ const Login = () => {
         localStorage.setItem("jwt", data.jwt);
 
        
-        window.location.href = "/wishlists";
+        window.location.href = "/profile";
       } else {
         throw new Error(data.error.message || "Une erreur est survenue.");
       }

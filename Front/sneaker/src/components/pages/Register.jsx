@@ -33,9 +33,11 @@ const Register = () => {
         throw new Error(data.error?.message || "Erreur inconnue");
       }
 
-      setSuccess("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+      setSuccess("Inscription réussie !");
+     
+      alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+      window.location.href = "/login";
       console.log("Utilisateur inscrit :", data);
-      // Ajoutez une redirection ou une logique supplémentaire si nécessaire
     } catch (err) {
       setError(err.message);
     } finally {

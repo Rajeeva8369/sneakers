@@ -7,25 +7,24 @@ import ProductList from "./components/pages/ProductList";
 import ProductDetails from "./components/pages/ProductDetails";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
-
+import Cart from "./components/pages/Cart";
 
 function App() {
   return (
-    
-      <Router>
-        <Navbar />
-        <main className="min-h-screen">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<ProductList />} />
-            <Route path="/products/:documentId" element={<ProductDetails />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </main>
-        <Footer />
-      </Router>
-    
+    <Router>
+      <Navbar />
+      <main className="min-h-screen">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<ProductList />} />
+          <Route path="/products/:documentId" element={<ProductDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/cart" element={<Cart />} />
+        </Routes>
+      </main>
+      <Footer />
+    </Router>
   );
 }
 

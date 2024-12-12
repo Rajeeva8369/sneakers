@@ -33,9 +33,9 @@ const Login = () => {
 
       setSuccess("Connexion réussie !");
       console.log("Utilisateur connecté :", data);
-      // Stockez le token JWT dans le localStorage
+      
       localStorage.setItem("jwt", data.jwt);
-      // Rediriger l'utilisateur après connexion (ajoutez votre logique ici)
+      window.location.href = "/products";
     } catch (err) {
       setError(err.message);
     } finally {

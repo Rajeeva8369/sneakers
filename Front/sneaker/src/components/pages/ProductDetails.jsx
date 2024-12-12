@@ -2,29 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ProductDetails = () => {
-  const { documentId } = useParams(); // ID récupéré depuis l'URL
+  const { documentId } = useParams(); 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const API_URL = `http://localhost:1337/api/products/?populate=*`; // API pour récupérer tous les produits
-        const response = await fetch(API_URL);
+        setLoading(true);
+        const response = await fetch(`http://localhost:1337/api/products/?populate=Images`);
         const data = await response.json();
 
-        console.log("Data fetched: ", data); // Débogage
+        if (!data.data) {
+          throw new Error("Produit introuvable.");
+        }
 
-        if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
-
-        // Filtrer le produit correspondant au documentId
-        const foundProduct = data.data.find((item) => item.id === parseInt(documentId));
-        if (!foundProduct) throw new Error("Produit introuvable");
-
-        setProduct(foundProduct); // Définir le produit trouvé
-      } catch (error) {
-        console.error("Erreur :", error);
-        setProduct(null); // En cas d'erreur, afficher "Produit introuvable"
+        setProduct(data.data);
+      } catch (err) {
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -33,26 +29,56 @@ const ProductDetails = () => {
     fetchProduct();
   }, [documentId]);
 
-  if (loading) return <div>Chargement...</div>;
-  if (!product) return <div>Produit introuvable.</div>;
+  if (loading) return <div className="text-center text-xl mt-10">Chargement...</div>;
+  if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
 
-  const { attributes } = product;
+  const attributes = product.attributes || {};
+  const { Name, Description, Price, Material, Availability, Brand, Category, Images } = attributes;
 
   return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-4">{attributes.Name}</h1>
-      <img
-        src={attributes.Images?.data?.[0]?.attributes?.url ? `http://localhost:1337${attributes.Images.data[0].attributes.url}` : "default-image.jpg"}
-        alt={attributes.Name}
-        className="w-full max-w-lg mx-auto rounded-lg shadow-lg mb-8"
-      />
-      <p>{attributes.Description}</p>
-      <p className="text-xl font-semibold text-green-500 mt-4">
-        {attributes.Price} €
-      </p>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-6">{Name || "Nom non spécifié"}</h1>
+      
+      {Images?.data?.length > 0 && (
+        <img
+          src={`http://localhost:1337${Images.data[0]?.attributes?.url}`}
+          alt={Name || "Image du produit"}
+          className="w-full max-w-lg mx-auto rounded-lg shadow-lg mb-8"
+        />
+      )}
+
+      <p className="text-lg text-gray-700 mb-4">{Description || "Description non disponible."}</p>
+      <p className="text-2xl font-semibold text-green-600 mb-4">{Price ? `${Price} €` : "Prix non disponible"}</p>
+      
+      <div className="mb-4">
+        <p>
+          <strong>Matériau :</strong> {Material || "Non spécifié"}
+        </p>
+        <p>
+          <strong>Disponibilité :</strong>{" "}
+          <span className={Availability ? "text-green-600" : "text-red-600"}>
+            {Availability ? "En stock" : "Rupture de stock"}
+          </span>
+        </p>
+        {Brand?.data && (
+          <p>
+            <strong>Marque :</strong> {Brand.data.attributes.Nom || "Non spécifiée"}
+          </p>
+        )}
+        {Category?.data && (
+          <p>
+            <strong>Catégorie :</strong> {Category.data.attributes.Nom || "Non spécifiée"}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <button className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all">
+          Ajouter au panier
+        </button>
+      </div>
     </div>
   );
 };
 
 export default ProductDetails;
-

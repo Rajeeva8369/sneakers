@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  // Simulez un état pour le panier
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState([]); // Simulez un état local pour le panier
 
   return (
     <nav className="bg-gray-900 text-white py-4 shadow-md">

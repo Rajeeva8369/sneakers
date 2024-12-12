@@ -33,11 +33,12 @@ const Register = () => {
         throw new Error(data.error?.message || "Erreur inconnue");
       }
 
+      // Stocker le JWT
+      localStorage.setItem("jwt", data.jwt);
+
       setSuccess("Inscription réussie !");
-     
       alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-      window.location.href = "/login";
-      console.log("Utilisateur inscrit :", data);
+      window.location.href = "/wishlists";
     } catch (err) {
       setError(err.message);
     } finally {

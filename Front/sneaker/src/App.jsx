@@ -9,6 +9,9 @@ import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Cart from "./components/pages/Cart";
 
+import Profil from "./components/pages/Profil";
+
+
 function App() {
   return (
     <Router>
@@ -21,6 +24,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />
+          
+          <Route path="/profile" element={<Profil />} />
         </Routes>
       </main>
       <Footer />

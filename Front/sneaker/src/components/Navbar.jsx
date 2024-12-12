@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const [cartItems, setCartItems] = useState([]); // Simulez un état local pour le panier
+  const [cartItems, setCartItems] = useState([]); 
 
   return (
     <nav className="bg-gray-900 text-white py-4 shadow-md">
@@ -10,6 +10,8 @@ const Navbar = () => {
         <Link to="/" className="text-2xl font-bold">
           Luxious Bag
         </Link>
+        
+
         <div className="flex items-center space-x-6">
           <Link to="/" className="hover:text-gray-300">
             Accueil
@@ -17,6 +19,12 @@ const Navbar = () => {
           <Link to="/products" className="hover:text-gray-300">
             Produits
           </Link>
+          <Link to="/wishlists" className="hover:text-gray-300">
+           Wishlist
+            </Link>
+            <Link to="/profile" className="hover:text-gray-300">
+              Profil
+            </Link>
           <Link to="/login" className="hover:text-gray-300">
             Connexion
           </Link>

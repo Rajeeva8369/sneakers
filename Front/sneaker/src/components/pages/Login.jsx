@@ -5,13 +5,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault(); 
     setLoading(true);
     setError("");
-    setSuccess("");
 
     try {
       const response = await fetch("http://localhost:1337/api/auth/local", {
@@ -20,24 +18,24 @@ const Login = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          identifier: email,
-          password: password,
+          identifier: email, 
+          password: password, 
         }),
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error?.message || "Erreur inconnue");
-      }
+      if (response.ok) {
+        
+        localStorage.setItem("jwt", data.jwt);
 
-      setSuccess("Connexion réussie !");
-      console.log("Utilisateur connecté :", data);
-      
-      localStorage.setItem("jwt", data.jwt);
-      window.location.href = "/products";
+       
+        window.location.href = "/wishlists";
+      } else {
+        throw new Error(data.error.message || "Une erreur est survenue.");
+      }
     } catch (err) {
-      setError(err.message);
+      setError(err.message); 
     } finally {
       setLoading(false);
     }
@@ -46,10 +44,9 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white shadow-md rounded px-8 pt-6 pb-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Se connecter</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Connexion</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        {success && <p className="text-green-500 text-center mb-4">{success}</p>}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label
               htmlFor="email"

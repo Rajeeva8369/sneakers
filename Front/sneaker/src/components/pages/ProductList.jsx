@@ -46,12 +46,8 @@ const ProductList = () => {
             <div className="p-5">
               <h3 className="text-xl font-semibold mb-3 text-gray-900">{product.Name}</h3>
               <p className="text-gray-600 mb-4 line-clamp-2">{product.Description}</p>
-              <Link
-                to={`/products/${product.id}`}
-                className="w-full block text-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                Voir plus
-              </Link>
+              
+                <Link to={`/products/${product.documentId}`}className="w-full block text-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Voir plus</Link>
             </div>
           </div>
         ))}

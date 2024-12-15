@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]); // Simulez un panier en local
+  const [cartItems, setCartItems] = useState([]); 
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Récupérer les détails des produits à partir de Strapi
+    
     const fetchCartProducts = async () => {
       try {
         const response = await fetch("http://localhost:1337/api/products?populate=*");
         const data = await response.json();
 
-        // Filtrer uniquement les produits ajoutés au panier
+        
         const filteredProducts = data.data.filter((product) =>
           cartItems.some((item) => item.id === product.id)
         );

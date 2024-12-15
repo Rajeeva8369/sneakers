@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ProductDetails = () => {
-  const { documentId } = useParams(); 
+  const { documentId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +11,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:1337/api/products/?populate=Images`);
+        const response = await fetch(`http://localhost:1337/api/products/${documentId}?populate=*`);
         const data = await response.json();
 
         if (!data.data) {
@@ -32,8 +32,17 @@ const ProductDetails = () => {
   if (loading) return <div className="text-center text-xl mt-10">Chargement...</div>;
   if (error) return <div className="text-center text-red-500 mt-10">{error}</div>;
 
-  const attributes = product.attributes || {};
-  const { Name, Description, Price, Material, Availability, Brand, Category, Images } = attributes;
+  const { attributes } = product || {};
+  const { 
+    Name, 
+    Description, 
+    Price, 
+    Material, 
+    Availability, 
+    brand, 
+    category, 
+    Images 
+  } = attributes || {};
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -56,18 +65,18 @@ const ProductDetails = () => {
         </p>
         <p>
           <strong>Disponibilité :</strong>{" "}
-          <span className={Availability ? "text-green-600" : "text-red-600"}>
-            {Availability ? "En stock" : "Rupture de stock"}
+          <span className={Availability === "Activate" ? "text-green-600" : "text-red-600"}>
+            {Availability === "Activate" ? "En stock" : "Rupture de stock"}
           </span>
         </p>
-        {Brand?.data && (
+        {brand?.data && (
           <p>
-            <strong>Marque :</strong> {Brand.data.attributes.Nom || "Non spécifiée"}
+            <strong>Marque :</strong> {brand.data.attributes.Name || "Non spécifiée"}
           </p>
         )}
-        {Category?.data && (
+        {category?.data && (
           <p>
-            <strong>Catégorie :</strong> {Category.data.attributes.Nom || "Non spécifiée"}
+            <strong>Catégorie :</strong> {category.data.attributes.Name || "Non spécifiée"}
           </p>
         )}
       </div>

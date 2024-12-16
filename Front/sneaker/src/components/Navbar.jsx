@@ -37,7 +37,7 @@ const Navbar = () => {
             </Link>
           )}
           {isAuthenticated && (
-            <Link to="/profile" className="hover:text-gray-300">
+            <Link to="/profil" className="hover:text-gray-300">
               Profil
             </Link>
           )}

@@ -38,7 +38,7 @@ const Register = () => {
 
       setSuccess("Inscription réussie !");
       alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-      window.location.href = "/wishlists";
+      window.location.href = "/login";
     } catch (err) {
       setError(err.message);
     } finally {

@@ -33,7 +33,7 @@ const Register = () => {
         throw new Error(data.error?.message || "Erreur inconnue");
       }
 
-      // Stocker le JWT
+      
       localStorage.setItem("jwt", data.jwt);
 
       setSuccess("Inscription réussie !");

@@ -1,63 +1,86 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Wishlist = () => {
-  const { wishlistId } = useParams();
+function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const token = '502b3ad67fb82f58252b17347a2203013769a127493405c11c8f4aaa9e8b3df4a358479218533cfd7cc31e4d67623b565717f0bd5a2d58d3293b23b037f66abc220ca00e09a7bca11041e2bc57424cafd199ff05a2ac5b860f8f0c8f513246057b9354711303afc24eb99fd758088a1686bbece56303f567b56eed09ade3c013'; // Remplacez par votre token d'authentification
+  const [removing, setRemoving] = useState(null); 
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:1337/api/wishlists/?populate=*`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setWishlist(data.data.products); 
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération de la wishlist:', error);
-        setLoading(false);
-      });
-  }, [wishlistId, token]);
+    const savedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    setWishlist(savedWishlist);
+  }, []);
 
-  if (loading) {
-    return <p>Chargement en cours...</p>;
+  const handleRemoveFromWishlist = (productId) => {
+    setRemoving(productId); 
+    setTimeout(() => {
+      const updatedWishlist = wishlist.filter((product) => product.id !== productId);
+      setWishlist(updatedWishlist);
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      setRemoving(null); 
+    }, 50); 
+  };
+
+  if (wishlist.length === 0) {
+    return (
+      <div className="p-4 text-center">
+        <h1 className="text-2xl font-bold mb-4">Ma Wishlist</h1>
+        <p className="text-gray-600">Votre wishlist est vide.</p>
+        <button
+          onClick={() => navigate("/products")}
+          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        >
+          Explorer les produits
+        </button>
+      </div>
+    );
   }
 
-  
-return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-semibold mb-4">Ma Wishlist</h1>
-      {wishlist && wishlist.length > 0 ? (
-        wishlist.map((item) => {
-          const product = item?.attributes?.product?.data?.attributes;
-          return (
-            <div key={item.id} className="border p-4 rounded-lg shadow-lg">
-              {product ? (
-                <>
-                  <img
-                    src={`http://localhost:1337${product.Images?.data?.[0]?.attributes?.url || ''}`}
-                    alt={product.Name || 'Produit'}
-                    className="w-full h-48 object-cover mb-4 rounded"
-                  />
-                  <h2 className="text-xl font-semibold">{product.Name || "Nom inconnu"}</h2>
-                  <p className="text-gray-600">{product.Description || "Pas de description disponible."}</p>
-                </>
-              ) : (
-                <p className="text-red-500">Produit non disponible.</p>
-              )}
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Ma Wishlist</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {wishlist.map((product) => (
+          <div
+            key={product.id}
+            className={`relative border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ${
+              removing === product.id ? "opacity-50" : "opacity-100"
+            }`}
+          >
+            
+            <button
+              onClick={() => handleRemoveFromWishlist(product.id)}
+              className="absolute top-3 right-3 bg-red-500 text-white rounded-full px-2 py-2 text-sm hover:bg-red-600 transition"
+            >
+              X
+            </button>
+
+            
+            {product.Images[0]?.formats?.medium?.url ? (
+              <img
+                src={`http://localhost:1337${product.Images[0].formats.medium.url}`}
+                alt={product.Name}
+                className="w-full h-48 object-cover"
+              />
+            ) : (
+              <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                <p className="text-gray-400">Aucune image</p>
+              </div>
+            )}
+
+            
+            <div className="p-4 bg-white">
+              <h2 className="text-lg font-semibold text-gray-800">{product.Name}</h2>
+              <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+                {product.Description || "Description non disponible."}
+              </p>
+              <p className="text-green-700 font-bold">Prix: {product.Price}€</p>
             </div>
-          );
-        })
-      ) : (
-        <p className="text-gray-500">Votre liste de favoris est vide.</p>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
+}
 
 export default Wishlist;

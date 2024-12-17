@@ -8,52 +8,74 @@ const Navbar = () => {
   
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    setIsAuthenticated(!!token); 
+    setIsAuthenticated(!!token);
   }, []);
 
+  
   const handleLogout = () => {
-    localStorage.removeItem("jwt"); 
-    setIsAuthenticated(false); 
+    localStorage.removeItem("jwt");
+    setIsAuthenticated(false);
     alert("Vous êtes déconnecté !");
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   return (
     <nav className="bg-gray-900 text-white py-4 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">
-          Luxious Bag
-        </Link>
-        <div className="flex items-center space-x-6">
-          <Link to="/" className="hover:text-gray-300">
-            Accueil
+      <div className="container mx-auto flex items-center justify-between px-6">
+        {/* Logo */}
+        <div className="flex items-center">
+          <Link to="/" className="flex items-center gap-2">
+            <img
+              src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+              alt="Luxious Bag"
+              className="h-8 w-auto"
+            />
+            <span className="text-xl font-bold">Luxious Bag</span>
           </Link>
-          <Link to="/products" className="hover:text-gray-300">
-            Produits
-          </Link>
+        </div>
+
+        {/* Navigation Links */}
+        <div className="hidden md:flex gap-6">
+          
           {isAuthenticated && (
-            <Link to="/wishlists" className="hover:text-gray-300">
+            <Link
+              to="/wishlists"
+              className="text-sm font-semibold hover:text-indigo-400"
+            >
               Wishlist
             </Link>
           )}
           {isAuthenticated && (
-            <Link to="/profil" className="hover:text-gray-300">
+            <Link
+              to="/profil"
+              className="text-sm font-semibold hover:text-indigo-400"
+            >
               Profil
             </Link>
           )}
+        </div>
+
+        {/* Boutons d'authentification */}
+        <div className="flex items-center gap-4">
           {!isAuthenticated ? (
             <>
-              <Link to="/login" className="hover:text-gray-300">
+              <Link
+                to="/login"
+                className="text-sm font-semibold hover:text-indigo-400"
+              >
                 Connexion
               </Link>
-              <Link to="/register" className="hover:text-gray-300">
+              <Link
+                to="/register"
+                className="text-sm font-semibold hover:text-indigo-400"
+              >
                 Inscription
               </Link>
             </>
           ) : (
             <button
               onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="bg-red-600 text-white text-sm px-4 py-2 rounded-md hover:bg-red-700 transition"
             >
               Déconnexion
             </button>

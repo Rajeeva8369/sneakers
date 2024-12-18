@@ -7,7 +7,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    setIsAuthenticated(!!token);
+    setIsAuthenticated(token);
   }, []);
 
   const handleLogout = () => {

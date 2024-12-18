@@ -10,7 +10,7 @@ const ProductList = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    setIsAuthenticated(!!token);
+    setIsAuthenticated(token);
   }, []);
 
   const addToWishlist = (product) => {
@@ -26,6 +26,7 @@ const ProductList = () => {
       const updatedWishlist = [...existingWishlist, product];
       localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
       alert("Produit ajouté à la wishlist !");
+      window.location.href = "/wishlists";
     } else {
       alert("Ce produit est déjà dans la wishlist.");
     }
@@ -141,7 +142,7 @@ const ProductList = () => {
                 </button>
                 <Link
                   to={`/products/${product.documentId}`}
-                  className="w-1/2 bg-gradient-to-r from-blue-500 to-blue-300 text-white text-sm font-medium rounded-lg shadow-md text-center py-3 hover:from-blue-600 hover:to-blue-400 transition"
+                  className="w-1/2 bg-gradient-to-r from-blue-500 to-blue-300 text-white text-sm font-medium rounded-lg shadow-md text-center py-5 hover:from-blue-600 hover:to-blue-400 transition"
                 >
                   Voir Plus
                 </Link>

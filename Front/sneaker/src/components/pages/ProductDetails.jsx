@@ -4,16 +4,12 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
- 
-  const getLastSegment = () => {
-    const pathSegments = window.location.pathname.split("/");
-    return pathSegments[pathSegments.length - 1];
-  };
+
+  const la_best = window.location.pathname.split("/").filter(Boolean).pop();
  
   useEffect(() => {
     const fetchProduct = async () => {
-      const productId = getLastSegment();
-      const API_URL = `http://localhost:1337/api/products/${productId}?populate=image`;
+      const API_URL = `http://localhost:1337/api/products/${la_best}`;
       try {
         const response = await fetch(API_URL);
         if (!response.ok) {
@@ -49,7 +45,7 @@ const ProductDetails = () => {
       <div className="grid md:grid-cols-2 items-start">
         <div className="flex items-center justify-center">
           <img
-            src={`http://localhost:1337${product.image.formats.medium.url}`}
+            src={product.Image}
             alt={product.Name}
             className="w-[450px] h-[350px] object-cover rounded-3xl"
           />

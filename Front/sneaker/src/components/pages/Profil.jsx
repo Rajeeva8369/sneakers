@@ -60,7 +60,7 @@ const Profil = () => {
       </h1>
 
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* Header section */}
+        
         <div className="bg-gradient-to-r from-indigo-600 to-purple-700 p-6 text-center text-white">
           <div className="w-24 h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center text-3xl font-bold">
             {userData?.username ? userData.username.charAt(0).toUpperCase() : "?"}
@@ -69,7 +69,7 @@ const Profil = () => {
           <p className="text-sm text-gray-200">{userData?.email || "Email non spécifié"}</p>
         </div>
 
-        {/* Body section */}
+        
         <div className="p-6 space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="bg-gray-100 p-4 rounded-lg shadow">
@@ -94,7 +94,7 @@ const Profil = () => {
           </div>
         </div>
 
-        {/* Action section */}
+        
         <div className="p-6 text-center">
           <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
             Modifier le profil

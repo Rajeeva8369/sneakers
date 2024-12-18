@@ -1,97 +1,73 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
+import React, { useState, useEffect } from "react";
+ 
 const ProductDetails = () => {
-  const { documentId } = useParams();
-  const [productData, setProductData] = useState(null);
+  const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  
-  const token =
-    "502b3ad67fb82f58252b17347a2203013769a127493405c11c8f4aaa9e8b3df4a358479218533cfd7cc31e4d67623b565717f0bd5a2d58d3293b23b037f66abc220ca00e09a7bca11041e2bc57424cafd199ff05a2ac5b860f8f0c8f513246057b9354711303afc24eb99fd758088a1686bbece56303f567b56eed09ade3c013";
-
-  
-  const fetchProductData = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:1337/api/products/?populate=*`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP : ${response.status}`);
-      }
-
-      const data = await response.json();
-      setProductData(data.data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+ 
+  const getLastSegment = () => {
+    const pathSegments = window.location.pathname.split("/");
+    return pathSegments[pathSegments.length - 1];
   };
-
-  
+ 
   useEffect(() => {
-    fetchProductData();
-  }, [documentId]);
-
-  if (loading) {
-    return <div className="text-gray-200 text-center mt-10">Chargement...</div>;
-  }
-
-  if (error) {
-    return <div className="text-red-500 text-center mt-10">Erreur : {error}</div>;
-  }
-
-  if (!productData) {
-    return <div className="text-gray-500 text-center mt-10">Produit introuvable.</div>;
-  }
-
-  
-  const attributes = productData.attributes || {};
-  const imageUrl =
-    attributes.Images?.data?.[0]?.attributes?.url || null;
-
+    const fetchProduct = async () => {
+      const productId = getLastSegment();
+      const API_URL = `http://localhost:1337/api/products/${productId}?populate=image`;
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error("Failed to fetch product data.");
+        }
+        const result = await response.json();
+        setProduct(result.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, []);
+ 
+  if (loading)
+    return (
+      <div className="text-center text-gray-500 p-4 animate-pulse">
+        Chargement...
+      </div>
+    );
+ 
+  if (error)
+    return (
+      <div className="text-center text-red-500 p-4 font-semibold">
+        Erreur : {error}
+      </div>
+    );
+ 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col sm:flex-row gap-6">
-        
-        <div className="flex-1">
-          {imageUrl ? (
-            <img
-              src={`http://localhost:1337${imageUrl}`}
-              alt={attributes.Name || "Image du produit"}
-              className="w-full max-w-md rounded-lg shadow-lg"
-            />
-          ) : (
-            <div className="text-gray-400">Aucune image disponible</div>
-          )}
+    <div className="container mx-auto px-4 py-32 bg-gray-100 h-screen">
+      <div className="grid md:grid-cols-2 items-start">
+        <div className="flex items-center justify-center">
+          <img
+            src={`http://localhost:1337${product.image.formats.medium.url}`}
+            alt={product.Name}
+            className="w-[450px] h-[350px] object-cover rounded-3xl"
+          />
         </div>
-
-        
-        <div className="flex-1">
-          <h1 className="text-4xl font-bold mb-4">
-            {attributes.Name || "Nom non spécifié"}
+ 
+        <div className="space-y-6">
+          <h1 className="text-3xl font-extrabold text-fnac-blue drop-shadow-md">
+            {product.Name}
           </h1>
-          <p className="text-lg text-gray-600 mb-4">
-            {attributes.Description || "Description non disponible."}
-          </p>
-          <p className="text-2xl font-bold text-green-600 mb-4">
-            {attributes.Price ? `${attributes.Price} €` : "Prix non disponible"}
-          </p>
-          <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
-            Ajouter au panier
-          </button>
+          <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+            <p className="text-lg font-medium text-gray-800 leading-relaxed">
+              {product.Description}
+            </p>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
+ 
 export default ProductDetails;

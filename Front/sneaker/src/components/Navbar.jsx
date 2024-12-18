@@ -38,29 +38,30 @@ const Navbar = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className="hidden md:flex flex-5 justify-end gap-10">
-         
+        <div className="hidden md:flex flex-5 justify-end items-center gap-10">
           {isAuthenticated && (
-            <Link
-              to="/wishlists"
-              className="text-sm font-semibold hover:text-pink-300 transition-colors"
-            >
-              Wishlist
-            </Link>
+            <>
+              <Link
+                to="/wishlists"
+                className="text-sm font-semibold hover:text-pink-300 transition-colors"
+              >
+                Wishlist
+              </Link>
+              <Link
+                to="/profil"
+                className="text-sm font-semibold hover:text-pink-300 transition-colors"
+              >
+                Profil
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-red-700 transition-shadow hover:shadow-lg"
+              >
+                Déconnexion
+              </button>
+            </>
           )}
-          {isAuthenticated && (
-            <Link
-              to="/profil"
-              className="text-sm font-semibold hover:text-pink-300 transition-colors"
-            >
-              Profil
-            </Link>
-          )}
-        </div>
-
-        {/* Boutons d'authentification */}
-        <div className="flex items-center gap-4">
-          {!isAuthenticated ? (
+          {!isAuthenticated && (
             <>
               <Link
                 to="/login"
@@ -75,13 +76,6 @@ const Navbar = () => {
                 Inscription
               </Link>
             </>
-          ) : (
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-red-700 transition-shadow hover:shadow-lg"
-            >
-              Déconnexion
-            </button>
           )}
         </div>
       </div>

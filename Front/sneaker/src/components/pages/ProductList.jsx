@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const API_URL = "http://localhost:1337/api/products?populate=Images";
 
@@ -44,6 +46,7 @@ const ProductList = () => {
 
         const data = await response.json();
         setProducts(data.data);
+        setFilteredProducts(data.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des produits :", error);
       }
@@ -52,20 +55,42 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
+  const handleSearch = (event) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filtered = products.filter(
+      (product) =>
+        product.Name.toLowerCase().includes(query) ||
+        (product.Description && product.Description.toLowerCase().includes(query))
+    );
+    setFilteredProducts(filtered);
+  };
+
   return (
-    <div className="bg-gray-50 pt-10">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <h2 className="text-5xl font-bold mb-20 text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 drop-shadow-md">
+    <div className="bg-gray-50 pt-6">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <h2 className="text-5xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 drop-shadow-md">
           Découvrez nos Produits Exclusifs
         </h2>
 
+        
+        <div className="mb-16 flex justify-center">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearch}
+            placeholder="Rechercher des produits..."
+            className="w-full max-w-lg px-4 py-2 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-transform transform hover:scale-105 flex flex-col h-full"
             >
-              {/* Image du produit */}
+              
               <div className="relative w-full h-48 bg-gray-100">
                 {product.Images?.[0]?.formats?.medium?.url ? (
                   <img
@@ -89,7 +114,7 @@ const ProductList = () => {
                 </span>
               </div>
 
-              {/* Contenu texte */}
+              
               <div className="p-4 flex flex-col justify-between h-full">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">{product.Name}</h3>
@@ -116,7 +141,7 @@ const ProductList = () => {
                 </button>
                 <Link
                   to={`/products/${product.documentId}`}
-                  className="w-1/2 bg-gradient-to-r from-blue-500 to-blue-300 text-white text-sm font-medium rounded-lg shadow-md text-center py-5 hover:from-blue-600 hover:to-blue-400 transition "
+                  className="w-1/2 bg-gradient-to-r from-blue-500 to-blue-300 text-white text-sm font-medium rounded-lg shadow-md text-center py-3 hover:from-blue-600 hover:to-blue-400 transition"
                 >
                   Voir Plus
                 </Link>

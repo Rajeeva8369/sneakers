@@ -45,7 +45,7 @@ const ProductDetails = () => {
       <div className="grid md:grid-cols-2 items-start">
         <div className="flex items-center justify-center">
           <img
-            src={product.Image}
+            src={product.image}
             alt={product.Name}
             className="w-[450px] h-[350px] object-cover rounded-3xl"
           />
